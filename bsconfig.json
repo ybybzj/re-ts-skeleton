@@ -1,0 +1,23 @@
+{
+  "name": "re-ts-skeleton",
+  "version": "0.1.0",
+  "bsc-flags": [
+    "-bs-super-errors"
+  ],
+  "sources": [
+    {
+      "dir": "src/re"
+    }
+  ],
+  "bs-dependencies": [
+    // add your dependencies here. You'd usually install them normally through `npm install my-dependency`. If my-dependency has a bsconfig.json too, then everything will work seamlessly.
+  ],
+  // "refmt": 3,
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "namespace": true
+}
