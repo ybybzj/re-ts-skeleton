@@ -1,13 +1,15 @@
 const BrowserSync = require('browser-sync')
 const makeMiddlewares = require('../browserSync-mw/moduleServ')
 const pUtil = require('path')
-const modServConfig = {
-  pathSettings: {
-    base: pUtil.join(process.cwd(), 'src'),
-  },
-}
 
-module.exports = function(gulp) {
+
+module.exports = function(gulp, _, Cfg) {
+  const tsConfig = Cfg.tsConfig || {}
+  const pathSettings = pathSettingsFromTsCfg(tsConfig.compilerOptions)
+  const modServConfig = pathSettings ? {
+    pathSettings: pathSettings
+  } : null
+  
   gulp.task('serve', function() {
     var bs = BrowserSync.create()
     bs.init({
@@ -15,8 +17,6 @@ module.exports = function(gulp) {
       files: [
         './src/**/*.{js|ts|tsx}',
         './statics/**/*.*',
-        // "./css/*.css",
-        // "../src/**/*.js"
       ],
       server: {
         baseDir: 'statics',
@@ -36,4 +36,35 @@ module.exports = function(gulp) {
       ),
     })
   })
+}
+
+
+function pathSettingsFromTsCfg(tsCompileOpts) {
+  if(tsCompileOpts == null || (tsCompileOpts.baseUrl == null && tsCompileOpts.paths == null)) {
+    return null
+  }
+  const pathSettings = {}
+  if(tsCompileOpts.baseUrl) {
+    pathSettings.baseUrl = pUtil.resolve(process.cwd(), tsCompileOpts.baseUrl)
+  }
+
+  if(tsCompileOpts.paths) {
+    pathSettings.paths = Object.keys(tsCompileOpts.paths).reduce((m, k)=>{
+      const _k = normalizePattern(k)
+      const path = normalizePattern(tsCompileOpts.paths[k][0])
+      m[_k] = path
+      return m
+    }, {})
+  }
+
+  return pathSettings
+}
+
+function normalizePattern(s) {
+  s = s.trim()
+  const l = s.length
+  if(s.lastIndexOf('/*') === l - 2) {
+    s = s.slice(0, l - 2)
+  }
+  return s
 }

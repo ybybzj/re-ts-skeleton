@@ -3,3 +3,5 @@ dist
 lib/bs
 src/re
 gulp
+_*
+gulpfile.js

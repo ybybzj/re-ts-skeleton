@@ -33,7 +33,7 @@
     "no-duplicate-variable": [true, "check-parameters"],
     "no-empty": [true, "allow-empty-catch"],
     "no-eval": true,
-    "no-implicit-dependencies": true,
+    "no-implicit-dependencies": false,
     "no-inferred-empty-object-type": false,
     "no-invalid-template-strings": true,
     "no-misused-new": true,

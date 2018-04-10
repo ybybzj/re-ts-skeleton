@@ -1,5 +1,3 @@
-type Of<T> = T
-
 type Nullable<T> = T | null | undefined
 
 interface Some<T> {
